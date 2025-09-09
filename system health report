@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# ==============================
+# System Health Monitor
+# Author - Syed Tausif
+# ==============================
+set -e # This will Make The Script Exit If Any Error Occurs.
+
+echo " Kindly Give Me a Name to Save the File: "
+read system_health_report #this command saves the filename in a new variable.
+
+timestamp=$(date +'%H:%M:%S-%p %d-%m-%y %A') #This Command Gets The Current Timestamp.
+
+# Collecting System Metrics
+cpu_usage=$(mpstat) # This Will Display The CPU Usage
+mem_usage=$(free -h) # This Will Display The Memory Usage
+disk_usage=$(df -h) # This will Display The Disk Usage
+processes=$(ps aux --sort=-%mem | head -6) # This will List The Top 5 Processes
+
+# Writing The Output Format
+{
+    echo "=============================================="
+    echo " System Health Report - $timestamp"
+    echo "=============================================="
+    echo "CPU Usage: " 
+    echo "$cpu_usage"
+    echo "=============================================="
+    echo "Memory Usage: "
+    echo "$mem_usage"
+    echo "=============================================="
+    echo "Disk Usage: "
+    echo "$disk_usage"
+    echo "=============================================="
+    echo "Top 5 Processes by Memory:"
+    echo "$processes"
+    echo ""
+} > "$system_health_report"
+
+echo "Health Report Is Saved To $PWD/$system_health_report"
